@@ -1,14 +1,14 @@
 <template>
   <div class="form-group">
     <label for="exampleInputEmail1">添加待办</label>
-    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" v-model='inputValue'>
+    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" v-model='inputValue' @keydown.enter="add(inputValue)">
     <small id="emailHelp" class="form-text text-muted">回车即可加入</small>
   </div>
   <ul class="list-group">
-    <li class="list-group-item">
+    <li class="list-group-item" v-for="(item, index) in todos" :key="'todo-' + index">
        <div class="form-check">
         <input type="checkbox" class="form-check-input" id="exampleCheck1">
-        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+        <label class="form-check-label" for="exampleCheck1">{{item}}</label>
       </div>
     </li>
   </ul>
@@ -16,12 +16,21 @@
 
 <script lang='ts'>
 
-import { defineComponent, reactive, ref } from 'vue'
+import { computed, defineComponent, reactive, ref } from 'vue'
+import store from '@/store'
+
 export default defineComponent({
   setup () {
     const inputValue = ref('')
+    const add = (value: string) => {
+      if (value.trim() === '') return
+      store.commit('add', value)
+      inputValue.value = ''
+    }
     return reactive({
-      inputValue
+      inputValue,
+      todos: computed(() => store.state.todos),
+      add
     })
   }
 })
