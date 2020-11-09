@@ -1,15 +1,21 @@
 <template>
-  <div class="container">
-    delete pagess
-  </div>
+  <ul class="list-group">
+    <li class="list-group-item d-flex align-items-center justify-content-between" v-for="(item, index) in todos" :key="'todo-' + index">
+      {{item}}
+    </li>
+  </ul>
 </template>
 
 <script lang='ts'>
 
-import { defineComponent } from 'vue'
+import { computed, defineComponent, reactive, ref } from 'vue'
+import store from '@/store'
+
 export default defineComponent({
   setup () {
-    return {}
+    return reactive({
+      todos: computed(() => store.state.deletes)
+    })
   }
 })
 </script>

@@ -5,10 +5,13 @@
     <small id="emailHelp" class="form-text text-muted">回车即可加入</small>
   </div>
   <ul class="list-group">
-    <li class="list-group-item" v-for="(item, index) in todos" :key="'todo-' + index">
+    <li class="list-group-item d-flex align-items-center justify-content-between" v-for="(item, index) in todos" :key="'todo-' + index">
        <div class="form-check">
-        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+        <input type="checkbox" class="form-check-input" id="exampleCheck1" @click.prevent='check(index)'>
         <label class="form-check-label" for="exampleCheck1">{{item}}</label>
+      </div>
+      <div class="float-right">
+        <button class="btn btn-danger" type='button' @click="delItem(index)">删除</button>
       </div>
     </li>
   </ul>
@@ -27,10 +30,18 @@ export default defineComponent({
       store.commit('add', value)
       inputValue.value = ''
     }
+    const delItem = (index: number) => {
+      store.commit('delete', index)
+    }
+    const check = (index: number) => {
+      store.commit('check', index)
+    }
     return reactive({
       inputValue,
       todos: computed(() => store.state.todos),
-      add
+      add,
+      delItem,
+      check
     })
   }
 })
